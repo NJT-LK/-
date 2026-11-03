@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半成品原材料计算器</title>
+    <style>
+        *{box-sizing:border-box;font-family:system-ui, sans-serif;}
+        body{max-width:600px;margin:40px auto;padding:0 16px;background:#f5f7fa;}
+        .card{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 10px #00000015;}
+        .row{margin:12px 0;}
+        label{display:block;margin-bottom:6px;font-weight:500;}
+        select,input{width:100%;padding:10px 12px;font-size:16px;border:1px solid #ccc;border-radius:6px;}
+        button{width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:6px;font-size:16px;margin-top:8px;cursor:pointer;}
+        button:hover{background:#1d4ed8;}
+        #result{margin-top:20px;white-space:pre-line;background:#f8fafc;padding:16px;border-radius:8px;font-size:15px;line-height:1.7;}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>钛合金 / 工程塑料原材料计算器</h2>
+    <div class="row">
+        <label>选择成品</label>
+        <select id="product">
+            <option value="ti">钛合金</option>
+            <option value="plastic">工程塑料</option>
+        </select>
+    </div>
+    <div class="row">
+        <label>制作数量</label>
+        <input type="number" id="count" min="1" value="1">
+    </div>
+    <button onclick="calc()">计算最低级原材料</button>
+    <div id="result"></div>
+</div>
+
+<script>
+//配方，最低级原始采集材料
+const formula = {
+    ti:{
+        "杉叶":7,"稀土矿":4,"兽脊":2,"钢筋":1,
+        "银矿":6,"深红银矿":3,"铜矿":6,"老橡木":12,
+        "铝矿":5,"锡矿":5,"老柏木":9,"树脂油":5
+    },
+    plastic:{
+        "树脂":14,"硝石":4,"麻":30,"植物根茎":4,
+        "麻茎皮":2,"麻茎杆":4,"银矿":6,"兽血":3,
+        "玻璃纤维":1,"铁桦残根":7
+    }
+}
+const nameMap = {ti:"钛合金", plastic:"工程塑料"};
+
+function calc(){
+    const prodKey = document.getElementById("product").value;
+    const num = parseInt(document.getElementById("count").value);
+    const resDom = document.getElementById("result");
+    if(isNaN(num) || num <=0){
+        resDom.innerText = "⚠️请输入大于0的整数数量";
+        return;
+    }
+    const base = formula[prodKey];
+    let output = `===== 制作 ${num} 个${nameMap[prodKey]} 需要最低级原材料 =====\n`;
+    for(let mat in base){
+        output += `${mat}：${base[mat] * num}\n`;
+    }
+    resDom.innerText = output;
+}
+</script>
+</body>
+</html>
